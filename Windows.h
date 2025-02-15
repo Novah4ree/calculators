@@ -11,7 +11,7 @@ private:
 		wxButton* button6, * button7, * button8, * button9, * button0;
 		wxButton* BackspaceDelete, * Equals, * Clear, * Multiply;
 
-		wxButton* Minus, * Add, * Divide, * Modulo;
+		wxButton* Minus, * Add, * Divide, * Modulo, *Button;
 		wxButton* sin, * cos, * tan;
 		wxButton* NegativePositive, *Negative, *Decimal;
 
@@ -44,7 +44,7 @@ private:
 		void ButtonCos(wxCommandEvent& evt);
 		void ButtonTan(wxCommandEvent& evt);
 		void ButtonNegativePositive(wxCommandEvent& evt);
-		void Button(wxCommandEvent& evt);
+		
 
 		DECLARE_EVENT_TABLE();
 
