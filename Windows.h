@@ -39,7 +39,7 @@ private:
 		void ButtonAdd(wxCommandEvent& evt);
 		void ButtonModulo(wxCommandEvent& evt);
 	    void ButtonDecimal(wxCommandEvent& evt);
-		void ButtonNegative(wxCommandEvent& evt);
+		
 		void ButtonSin(wxCommandEvent& evt);
 		void ButtonCos(wxCommandEvent& evt);
 		void ButtonTan(wxCommandEvent& evt);
