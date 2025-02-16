@@ -1,5 +1,5 @@
 #include "Windows.h"
-
+#include <wx/tokenzr.h>
 
 
 wxBEGIN_EVENT_TABLE(Window, wxFrame)
@@ -27,7 +27,6 @@ EVT_BUTTON(10019, Window::ButtonSin)
 EVT_BUTTON(10020, Window::ButtonCos)
 EVT_BUTTON(10021, Window::ButtonTan)
 EVT_BUTTON(10022, Window::ButtonDecimal)
-EVT_BUTTON(10023, Window::ButtonNegative)
 
 wxEND_EVENT_TABLE()
 
@@ -65,37 +64,42 @@ void Window::Controls(){
 	 BackspaceDelete = new wxButton(this, 10012, " <-");
 	 Multiply = new wxButton(this, 10018, " * ");
      Modulo = new wxButton(this, 10014, " % ");
-	 Negative = new wxButton(this, 10023, " - ");
 	 Divide = new wxButton(this, 10017, " / ");
-     Decimal = new wxButton(this, 10022, " . ");
+    
 	 NegativePositive = new wxButton(this, 10013, " -/+ ");
      Equals = new wxButton(this, 10010, " = ");
-
+	 Decimal = new wxButton(this, 10022, " . ");
+	 Button = new wxButton(this, 1, " ");
 	 grid->Add(sin, 1, wxEXPAND);
 	 grid->Add(cos, 1, wxEXPAND);
 	 grid->Add(tan, 1, wxEXPAND);
 	 grid->Add(Clear, 1, wxEXPAND);
-	 grid->Add(Negative, 1, wxEXPAND);
-	 grid->Add(Decimal, 1, wxEXPAND);
+	
      grid->Add(button9, 1, wxEXPAND);
 	 grid->Add(button8, 1, wxEXPAND);
 	 grid->Add(button7, 1, wxEXPAND);
+	 grid->Add(Divide, 1, wxEXPAND);
+
      grid->Add(button6, 1, wxEXPAND);
 	 grid->Add(button5, 1, wxEXPAND);
-	 grid->Add(button4, 1, wxEXPAND); 
+	 grid->Add(button4, 1, wxEXPAND);
+	 grid->Add(Multiply, 1, wxEXPAND);
+
 	 grid->Add(button3, 1, wxEXPAND);
 	 grid->Add(button2, 1, wxEXPAND);
 	 grid->Add(button1, 1, wxEXPAND);
+	 grid->Add(Modulo, 1, wxEXPAND);
+
 	 grid->Add(Minus, 1, wxEXPAND);
      grid->Add(button0, 1, wxEXPAND);
- 	 grid->Add(Add, 1, wxEXPAND);
-     grid->Add(Multiply, 1, wxEXPAND);
-	 grid->Add(Modulo, 1, wxEXPAND);
-	 grid->Add(Divide, 1, wxEXPAND);  
-	 grid->Add(NegativePositive, 1, wxEXPAND);
+	 grid->Add(Add, 1, wxEXPAND);
 	 grid->Add(Equals, 1, wxEXPAND);
-	 grid->Add(BackspaceDelete, 1, wxEXPAND);
 
+	 grid->Add(Button, 1, wxEXPAND);
+	 grid->Add(Decimal, 1, wxEXPAND);
+	 grid->Add(BackspaceDelete, 1, wxEXPAND);
+	 grid->Add(NegativePositive, 1, wxEXPAND);
+	
 	 mainSizer->Add(grid, 1, wxEXPAND | wxALL, 5);
 	 SetSizer(mainSizer);
 
@@ -153,6 +157,7 @@ void Window::ButtonClear(wxCommandEvent& evt)
 
 void Window::ButtonMultiply(wxCommandEvent& evt)
 {
+	textBox->AppendText("*");
 }
 
 void Window::ButtonMinus(wxCommandEvent& evt)
@@ -162,45 +167,61 @@ void Window::ButtonMinus(wxCommandEvent& evt)
 
 void Window::ButtonDivide(wxCommandEvent& evt)
 {
+	wxString Curr = textBox->GetValue();
+	if (!Curr.EndsWith("0")) {
+		textBox->AppendText("/");
+	}
+	else{
+		wxMessageBox("DON'T DIVIDE BY 0"," ERROR");
+	}
 }
 
 void Window::ButtonAdd(wxCommandEvent& evt)
 {
+	textBox->AppendText("+");
 }
 
 void Window::ButtonModulo(wxCommandEvent& evt)
 {
+	wxString Curr = textBox->GetValue();
+	if (!Curr.EndsWith("0")) {
+		textBox->AppendText("%");
+	}
+	else {
+		wxMessageBox("DON'T DIVIDE BY 0", " ERROR");
+	}
 }
 
 void Window::ButtonDecimal(wxCommandEvent& evt)
 {
-}
-
-void Window::ButtonNegative(wxCommandEvent& evt)
-{
+	textBox->AppendText(".");
 }
 
 void Window::ButtonSin(wxCommandEvent& evt)
 {
+	textBox->AppendText("sin(");
 }
 
 void Window::ButtonCos(wxCommandEvent& evt)
 {
+	textBox->AppendText("cos(");
 }
 
 void Window::ButtonTan(wxCommandEvent& evt)
 {
+	textBox->AppendText("tan(");
 }
 
 void Window::ButtonNegativePositive(wxCommandEvent& evt)
 {
-
+	double val;
+	textBox->GetValue().ToDouble(&val);
+	textBox->SetValue(wxString::Format("%.2f", -val));
 }
-
-
 
 void Window::Button0(wxCommandEvent& evt)
 {
+	textBox->AppendText("0");
 }
 
 void Window::ButtonBackspaceDelete(wxCommandEvent& evt)
@@ -209,8 +230,53 @@ void Window::ButtonBackspaceDelete(wxCommandEvent& evt)
 	if (!current.empty()) {
 		textBox->SetValue(current.RemoveLast());
 	}
+	else {
+		textBox->Clear();
+	}
 }
 
 void Window::ButtonEquals(wxCommandEvent& evt)
 {
+	wxString functions = textBox->GetValue();
+	wxStringTokenizer tokenizer(functions, "+||-||*||/||%");
+
+	if (functions.IsEmpty()) {
+		return;
+	}
+
+	double result = 0;
+	double num1, num2;
+	wxString token = tokenizer.GetNextToken();
+	token.ToDouble(&num1); 
+	while (tokenizer.HasMoreTokens()) {
+		wxChar op = functions[tokenizer.GetPosition() - 1];
+		token = tokenizer.GetNextToken();
+		token.ToDouble(&num2);
+
+		switch (op) {
+		case '+': 
+			result = num1 + num2;
+			break;
+		case '-':
+			result = num1 - num2;
+			break;
+		case '*':
+			result = num1 * num2;
+			break;
+		case '/':
+			if (num2 != 0) {
+				result = num1 / num2;
+			}
+			else {
+				num2 = 0;
+				std::cout << " ERROR"; 
+			}
+			break;
+		case '%':
+			result = fmod(num1, num2);
+			break;
+		}
+		num1 = result;
+	}
+	textBox->SetValue(wxString::Format("%.2f", result));
 }
