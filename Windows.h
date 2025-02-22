@@ -5,19 +5,37 @@
 
 class Window : public wxFrame{
 private:
-
-		wxTextCtrl* textBox;
-		wxButton* button1, * button2, * button3, * button4, * button5;
-		wxButton* button6, * button7, * button8, * button9, * button0;
-		wxButton* BackspaceDelete, * Equals, * Clear, * Multiply;
-
-		wxButton* Minus, * Add, * Divide, * Modulo, *Button;
-		wxButton* sin, * cos, * tan;
-		wxButton* NegativePositive, *Negative, *Decimal;
+	
+	wxTextCtrl* textBox;
+    wxButton* sin;
+    wxButton* cos;
+    wxButton* tan;
+    wxButton* button0;
+    wxButton* button1;
+    wxButton* button2;
+    wxButton* button3;
+    wxButton* button4;
+    wxButton* button5;
+    wxButton* button6;
+    wxButton* button7;
+    wxButton* button8;
+    wxButton* button9;
+    wxButton* Add;
+    wxButton* Minus;
+    wxButton* Multiply;
+    wxButton* Divide;
+    wxButton* Modulo;
+    wxButton* Clear;
+    wxButton* Equals;
+    wxButton* Decimal;
+    wxButton* BackspaceDelete;
+    wxButton* NegativePositive;
+    wxButton* button;
 
 		void Controls();
 
-
+		void CreateBtn();
+		void Button(wxCommandEvent& evt);
 		void Button1(wxCommandEvent& evt);
 		void Button2(wxCommandEvent& evt);
 		void Button3(wxCommandEvent& evt);
@@ -44,14 +62,12 @@ private:
 		void ButtonCos(wxCommandEvent& evt);
 		void ButtonTan(wxCommandEvent& evt);
 		void ButtonNegativePositive(wxCommandEvent& evt);
-		
-
-		DECLARE_EVENT_TABLE();
+		wxBoxSizer* mainSizer;
 
 public:
 
 	Window();
 
-	
+	wxTextCtrl* GetTextBox() { return textBox; }
 };
 
