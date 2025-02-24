@@ -1,24 +1,71 @@
 #include "Windows.h"
 #include <wx/tokenzr.h>
 #include "ButtonFactory.h"
+#include "CalculatorProcessor.h"
 
-Window::Window() : wxFrame(nullptr, wxID_ANY, "Krystal Calculator", wxPoint(0, 0), wxSize(250, 300))
+
+Window::Window() : wxFrame(nullptr, wxID_ANY, "Krystal Calculator", wxPoint(0,0), wxSize(250, 300))
 {
-	CreateBtn();//create buttons
-	Controls(); //sets up the layout
-}
 
+	wxPoint pos(100, 100);
+	wxSize size(80, 40);
+
+	Controls(); //sets up the layout
+	BindEvents();
+	
+}
+void Window::BindEvents() {
+
+	
+	//bind all buttons events
+	Bind(wxEVT_BUTTON, &Window::Button0, this, 10000);
+	Bind(wxEVT_BUTTON, &Window::Button1, this, 10001);
+	Bind(wxEVT_BUTTON, &Window::Button2, this, 10002);
+	Bind(wxEVT_BUTTON, &Window::Button3, this, 10003);
+	Bind(wxEVT_BUTTON, &Window::Button4, this, 10004);
+	Bind(wxEVT_BUTTON, &Window::Button5, this, 10005);
+	Bind(wxEVT_BUTTON, &Window::Button6, this, 10006);
+	Bind(wxEVT_BUTTON, &Window::Button7, this, 10007);
+	Bind(wxEVT_BUTTON, &Window::Button8, this, 10008);
+	Bind(wxEVT_BUTTON, &Window::Button9, this, 10009);
+	Bind(wxEVT_BUTTON, &Window::ButtonEquals, this, 100010);
+	Bind(wxEVT_BUTTON, &Window::ButtonClear, this, 100011);
+	Bind(wxEVT_BUTTON, &Window::ButtonBackspaceDelete, this, 100012);
+	Bind(wxEVT_BUTTON, &Window::ButtonNegativePositive, this, 100013);
+	Bind(wxEVT_BUTTON, &Window::ButtonModulo, this, 100014);
+	Bind(wxEVT_BUTTON, &Window::ButtonAdd, this, 100015);
+	Bind(wxEVT_BUTTON, &Window::ButtonMinus, this, 100016);
+	Bind(wxEVT_BUTTON, &Window::ButtonDivide, this, 100017);
+	Bind(wxEVT_BUTTON, &Window::ButtonMultiply, this, 100018);
+	Bind(wxEVT_BUTTON, &Window::ButtonSin, this, 100019);
+	Bind(wxEVT_BUTTON, &Window::ButtonCos, this, 100020);
+	Bind(wxEVT_BUTTON, &Window::ButtonTan, this, 100021);
+	Bind(wxEVT_BUTTON, &Window::ButtonDecimal, this, 100022);
+	Bind(wxEVT_BUTTON, &Window::Button, this, 100026);
+
+
+}
+wxTextCtrl* Window::GetTextBox()
+{
+	return textBox; 
+}
 void Window::Controls(){
 
+	
+	Add = Minus = Decimal = BackspaceDelete = nullptr;
+	NegativePositive = Multiply = nullptr;
+	Clear = Equals = Divide = Modulo = nullptr;
 	wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 	//create add textbox 
 	textBox = new wxTextCtrl(this, wxID_ANY, " ", wxDefaultPosition, wxSize(275,75));
+	//set color to textbox
+	textBox->SetBackgroundColour(wxColour(*wxYELLOW));
+	this->SetBackgroundColour(wxColour(*wxBLACK));
+
 	mainSizer->Add(textBox, 0, wxEXPAND | wxALL, 5);
-	this->SetSizer(mainSizer);
-	
 	//create grid sizer
 	wxGridSizer* grid = new wxGridSizer(6,4,3,3);
-
+	CreateBtn();
 	//row1
 	 grid->Add(sin, 1, wxEXPAND | wxALL, 1);
 	 grid->Add(cos, 1, wxEXPAND | wxALL, 1);
@@ -53,18 +100,20 @@ void Window::Controls(){
 	 grid->Add(button, 1, wxEXPAND | wxALL, 1);
 	//add grid to main sizer
 	 mainSizer->Add(grid, 1, wxEXPAND | wxALL, 5);
-
+	
 	 //set the main sizer
 	 SetSizer(mainSizer);
-
+	 this->Refresh();
+	 this->Update();
 	 //fit the window to its contents
 	 Fit();
 }
 void Window::CreateBtn() {
-
+	////Creating Addition Button
 	sin = ButtonFactory::CreateFunctionBtn(this, 10019, "sin", wxDefaultPosition, wxDefaultSize);
 	cos = ButtonFactory::CreateFunctionBtn(this, 10020, " cos", wxDefaultPosition, wxDefaultSize);
 	tan = ButtonFactory::CreateFunctionBtn(this, 10021, " tan", wxDefaultPosition, wxDefaultSize);
+
 	button1 = ButtonFactory::CreateNumberBtn(this, 10001, " 1 ", wxDefaultPosition, wxDefaultSize);
 	button2 = ButtonFactory::CreateNumberBtn(this, 10002, " 2 ", wxDefaultPosition, wxDefaultSize);
 	button3 = ButtonFactory::CreateNumberBtn(this, 10003, " 3 ", wxDefaultPosition, wxDefaultSize);
@@ -74,20 +123,20 @@ void Window::CreateBtn() {
 	button7 = ButtonFactory::CreateNumberBtn(this, 10007, " 7 ", wxDefaultPosition, wxDefaultSize);
 	button8 = ButtonFactory::CreateNumberBtn(this, 10008, " 8 ", wxDefaultPosition, wxDefaultSize);
 	button9 = ButtonFactory::CreateNumberBtn(this, 10009, " 9 ", wxDefaultPosition, wxDefaultSize);
+
 	Minus = ButtonFactory::CreateOperationBtn(this, 10016, " - ", wxDefaultPosition, wxDefaultSize);
 	button0 = ButtonFactory::CreateNumberBtn(this, 10000, " 0 ", wxDefaultPosition, wxDefaultSize);
-	Add = ButtonFactory::CreateOperationBtn(this, 10015, " + ", wxDefaultPosition, wxDefaultSize);
-	Clear = ButtonFactory::CreateClearBtn(this, 10011, " C", wxDefaultPosition, wxDefaultSize);
-	BackspaceDelete = ButtonFactory::CreateBackSpaceBtn(this, 10012, " <-", wxDefaultPosition, wxDefaultSize);
+	Add = ButtonFactory::CreateOperationBtn(this, 10015, " + ", wxDefaultPosition, wxDefaultSize);	
 	Multiply = ButtonFactory::CreateOperationBtn(this, 10018, " * ", wxDefaultPosition, wxDefaultSize);
 	Modulo = ButtonFactory::CreateOperationBtn(this, 10014, " % ", wxDefaultPosition, wxDefaultSize);
 	Divide = ButtonFactory::CreateOperationBtn(this, 10017, " / ", wxDefaultPosition, wxDefaultSize);
-
 	NegativePositive = ButtonFactory::CreateOperationBtn(this, 10013, " -/+ ", wxDefaultPosition, wxDefaultSize);
-	Equals = ButtonFactory::CreateEqualBtn(this, 10010, " = ", wxDefaultPosition, wxDefaultSize);
 	Decimal = ButtonFactory::CreateOperationBtn(this, 10022, " . ", wxDefaultPosition, wxDefaultSize);
-	button = ButtonFactory::CreateBtn(this, 10026, " ", wxDefaultPosition, wxDefaultSize);
 
+	Clear = ButtonFactory::CreateClearBtn(this, 10011, " C", wxDefaultPosition, wxDefaultSize);
+	button = ButtonFactory::CreateBtn(this, 10026, " ", wxDefaultPosition, wxDefaultSize);
+	BackspaceDelete = ButtonFactory::CreateBackSpaceBtn(this, 10012, " <-", wxDefaultPosition, wxDefaultSize);
+	Equals = ButtonFactory::CreateEqualBtn(this, 10010, " = ", wxDefaultPosition, wxDefaultSize);
 }
 void Window::Button(wxCommandEvent& evt)
 {
@@ -201,10 +250,9 @@ void Window::ButtonTan(wxCommandEvent& evt)
 
 void Window::ButtonNegativePositive(wxCommandEvent& evt)
 {
-	double val;
-	textBox->GetValue().ToDouble(&val);
-	textBox->SetValue(wxString::Format("%.2f", -val));
+	textBox->AppendText("+/-");
 }
+
 
 void Window::Button0(wxCommandEvent& evt)
 {
@@ -224,47 +272,14 @@ void Window::ButtonBackspaceDelete(wxCommandEvent& evt)
 
 void Window::ButtonEquals(wxCommandEvent& evt)
 {
-	wxString functions = textBox->GetValue();
-	wxStringTokenizer tokenizer(functions, "+||-||*||/||%");
+	wxString expression = textBox->GetValue();
+	expression.Replace(" ", "");
+	try {
+		double result = CalculatorProcessor::GetInstance()->Calculate(expression.ToStdString());
 
-	if (functions.IsEmpty()) {
-		return;
+		textBox->SetValue(wxString::Format("%.2f", result));
 	}
-
-	double result = 0;
-	double num1;
-		double num2;
-	wxString token = tokenizer.GetNextToken();
-	token.ToDouble(&num1); 
-	while (tokenizer.HasMoreTokens()) {
-		wxChar op = functions[tokenizer.GetPosition() - 1];
-		token = tokenizer.GetNextToken();
-		token.ToDouble(&num2);
-
-		switch (op) {
-		case '+': 
-			result = num1 + num2;
-			break;
-		case '-':
-			result = num1 - num2;
-			break;
-		case '*':
-			result = num1 * num2;
-			break;
-		case '/':
-			if (num2 != 0) {
-				result = num1 / num2;
-			}
-			else {
-				num2 = 0;
-				std::cout << "ERROR!"; 
-			}
-			break;
-		case '%':
-			result = fmod(num1, num2);
-			break;
-		}
-		num1 = result;
+	catch (...) {
+		textBox->SetValue("ERROR");
 	}
-	textBox->SetValue(wxString::Format("%.2f", result));
 }

@@ -6,31 +6,31 @@
 class Window : public wxFrame{
 private:
 	
-	wxTextCtrl* textBox;
-    wxButton* sin;
-    wxButton* cos;
-    wxButton* tan;
-    wxButton* button0;
-    wxButton* button1;
-    wxButton* button2;
-    wxButton* button3;
-    wxButton* button4;
-    wxButton* button5;
-    wxButton* button6;
-    wxButton* button7;
-    wxButton* button8;
-    wxButton* button9;
-    wxButton* Add;
-    wxButton* Minus;
-    wxButton* Multiply;
-    wxButton* Divide;
-    wxButton* Modulo;
-    wxButton* Clear;
-    wxButton* Equals;
-    wxButton* Decimal;
-    wxButton* BackspaceDelete;
-    wxButton* NegativePositive;
-    wxButton* button;
+	wxTextCtrl* textBox = nullptr;
+    wxButton* sin = nullptr;
+    wxButton* cos = nullptr;
+    wxButton* tan = nullptr;
+    wxButton* button0 = nullptr;
+    wxButton* button1 = nullptr;
+    wxButton* button2 = nullptr;
+    wxButton* button3 = nullptr;
+    wxButton* button4 = nullptr;
+    wxButton* button5 = nullptr;
+    wxButton* button6 = nullptr;
+    wxButton* button7 = nullptr;
+    wxButton* button8 = nullptr;
+    wxButton* button9 = nullptr;
+    wxButton* Add = nullptr;
+    wxButton* Minus = nullptr;
+	wxButton* Multiply = nullptr;
+    wxButton* Divide = nullptr;
+    wxButton* Modulo = nullptr;
+    wxButton* Clear = nullptr;
+    wxButton* Equals = nullptr;
+    wxButton* Decimal = nullptr;
+    wxButton* BackspaceDelete = nullptr;
+    wxButton* NegativePositive = nullptr;
+    wxButton* button = nullptr;
 
 		void Controls();
 
@@ -68,6 +68,8 @@ public:
 
 	Window();
 
-	wxTextCtrl* GetTextBox() { return textBox; }
+	void BindEvents();
+
+	wxTextCtrl* GetTextBox();
 };
 

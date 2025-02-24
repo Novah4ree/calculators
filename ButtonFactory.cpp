@@ -1,5 +1,8 @@
 #include "ButtonFactory.h"
 #include "Windows.h"
+#include "CalculatorProcessor.h"
+#include <vector>
+
 
 wxButton* ButtonFactory::CreateBtn( wxFrame* parent, int id, const wxString& label, wxPoint(pos), wxSize(size))
 {
@@ -74,6 +77,25 @@ wxButton* ButtonFactory::CreateBackSpaceBtn(wxFrame* parent, int id, const wxStr
 
 wxButton* ButtonFactory::CreateEqualBtn(wxFrame* parent, int id, const wxString& label, wxPoint(pos), wxSize(size))
 {
-	return CreateBtn(parent, id, "=", pos, size);
+	
+		wxButton* button = CreateBtn(parent, id, "=", pos, size);
+		parent->Bind(wxEVT_BUTTON, [parent](wxCommandEvent& evt) {
+			Window* window = dynamic_cast<Window*>(parent);
+			if (window) {
+				wxString expression = window->GetTextBox()->GetValue();
+				expression.Replace(" ", "");
+
+				try {
+					double result = CalculatorProcessor::GetInstance()->Calculate(expression.ToStdString());
+					window->GetTextBox()->SetValue(wxString::Format("%.2f", result));
+				}
+				catch (...) {
+					window->GetTextBox()->SetValue("Error");
+				}
+			}
+		}, id);
+		return button;
+	
+
 
 }
