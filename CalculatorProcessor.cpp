@@ -28,15 +28,15 @@ double CalculatorProcessor::Calculate(const std::string& expression)
     if (m_string.empty()) {
         return 0.0;
     }
-    //add spacing around operators for token
+    //add spacing around operators for tokenization
     for (size_t i = 0; i < m_string.length(); ++i)
     {
-        if (m_string[i] == '+'||m_string[i] == '-'||m_string[i] == '*'||m_string[i] == '/'||m_string[i] == '%') {
-            m_string.insert(i, "");
-            m_string.insert(i + 2, "");
+        if (m_string[i] == '+' || m_string[i] == '-' || m_string[i] == '*' || m_string[i] == '/' || m_string[i] == '%') {
+            m_string.insert(i, " ");
+            m_string.insert(i + 2, " ");
             i += 2;
         }
-
+        
     }
    //tokenization
     std::istringstream _StringStream(m_string);
@@ -78,13 +78,13 @@ double CalculatorProcessor::Calculate(const std::string& expression)
         postfix.push_back(_operatorStack.top());
         _operatorStack.pop();
     }
+    std::stack<double>value = valuestack;
+
 
     for (const std::string& token : postfix) {
         //process trigg functions
         if (token == "sin" || token == "cos" || token == "tan") {
-            if (valuestack.empty()) {
-                throw std::runtime_error("Invalid");
-            }
+            if (valuestack.empty()) throw std::runtime_error("Invalid expression");
             double value = valuestack.top();
             valuestack.pop();
             if (token == "sin") {
@@ -93,58 +93,53 @@ double CalculatorProcessor::Calculate(const std::string& expression)
             else if (token == "cos") {
                 valuestack.push(cos(value));
             }
-            else if(token == "tan"){
-
+            else if (token == "tan") {
                 valuestack.push(tan(value));
             }
         }
         //operator process
         else if (token == "+" || token == "-" || token == "*" || token == "/" || token == "%") {
-            if (valuestack.size() < 2) {
-                throw std::runtime_error("Invalid");
-            }
-            double b = valuestack.top(); valuestack.pop();
-            double a = valuestack.top(); valuestack.pop();
 
-            if (token == "+") {
-                valuestack.push(a + b);
-            }
-            else if (token == "-") {
-                valuestack.push(a - b);
-            }
-            else if (token == "*") {
-                valuestack.push(a * b);
-            }
-            else if (token == "/") {
-                if (b == 0) {
-                    throw std::runtime_error("Division by Zero");
-                 
+            if (_tokens.size() == 3) {
+                double a = std::stod(_tokens[0]);
+                double b = std::stod(_tokens[2]);
+
+                std::string oper = _tokens[1];
+                if (oper == "+") {
+                    valuestack.push(a + b);
                 }
-                valuestack.push(a / b);
-            }
-            else if (token == "%") {
-                if (b == 0) {
-                    throw std::runtime_error("Modulo by zero");
+                else if (oper == "-") {
+                    valuestack.push(a - b);
+                }
+                else if (oper == "*") {
+                    valuestack.push(a * b);
+                }
+                else if (oper == "/") {
+                    if (b == 0) {
+                        throw std::runtime_error("Division by Zero");
+                        valuestack.push(a / b);
+                    }
                    
                 }
-                valuestack.push(fmod(a, b));
+                else if (oper == "%") {
+                       if (b == 0) {
+                        throw std::runtime_error("Modulo by zero");
+                         valuestack.push(fmod(a, b));
+                       }
+                  
+                }
             }
-        }
+        }   
         //process numbers
         else {
-            try {
-                valuestack.push(std::stod(token));//convert to double
-            }
-            catch (...) {
-                throw std::runtime_error("Invalid");
-            }
+            
+         valuestack.push(std::stod(token));//convert to double
+            
         }
        
     }
-    if (valuestack.empty()) {
-        throw std::runtime_error("Invalid");
-    }
-    return valuestack.top();//final return result
+    
+    return valuestack.empty() ? 0.0 : valuestack.top();//final return result
 }
 //define operator precedence
 int CalculatorProcessor::getPrecedence(const std::string& op)
