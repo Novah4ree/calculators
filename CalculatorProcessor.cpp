@@ -7,13 +7,14 @@
 #include <sstream>
 #include <algorithm>
 #include "Windows.h"
+
 //initialized singleton instance
 CalculatorProcessor* CalculatorProcessor::instance = nullptr;
 //singleton pattern 
 CalculatorProcessor* CalculatorProcessor::GetInstance()
 {
-    if (instance == nullptr) {
-        instance = new CalculatorProcessor();
+    if (CalculatorProcessor::instance == nullptr) {
+       instance = new CalculatorProcessor();
     }
     return instance;
 }

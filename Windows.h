@@ -5,11 +5,15 @@
 
 class Window : public wxFrame{
 private:
-	
+	//text control for displaying input n results
 	wxTextCtrl* textBox = nullptr;
+
+	//trig funcs button
     wxButton* sin = nullptr;
     wxButton* cos = nullptr;
     wxButton* tan = nullptr;
+
+	//numeric button 0-9
     wxButton* button0 = nullptr;
     wxButton* button1 = nullptr;
     wxButton* button2 = nullptr;
@@ -20,11 +24,15 @@ private:
     wxButton* button7 = nullptr;
     wxButton* button8 = nullptr;
     wxButton* button9 = nullptr;
+
+	//operation buttons
     wxButton* Add = nullptr;
     wxButton* Minus = nullptr;
 	wxButton* Multiply = nullptr;
     wxButton* Divide = nullptr;
     wxButton* Modulo = nullptr;
+
+	//function buttons
     wxButton* Clear = nullptr;
     wxButton* Equals = nullptr;
     wxButton* Decimal = nullptr;
@@ -32,21 +40,22 @@ private:
     wxButton* NegativePositive = nullptr;
     wxButton* button = nullptr;
 
-		void Controls();
+	//private member functions for UI and event handling setups
+		void Controls();//set up layout
+		void CreateBtn();//creates all buttons
+		void BindEvents();// binds button events to handlers
 
-		void CreateBtn();
+		//button event handlers
 		void Button(wxCommandEvent& evt);
 		void Button1(wxCommandEvent& evt);
 		void Button2(wxCommandEvent& evt);
 		void Button3(wxCommandEvent& evt);
-
 		void Button4(wxCommandEvent& evt);
 		void Button5(wxCommandEvent& evt);
 		void Button6(wxCommandEvent& evt);
 		void Button7(wxCommandEvent& evt);
 		void Button8(wxCommandEvent& evt);
 		void Button9(wxCommandEvent& evt);
-
 		void Button0(wxCommandEvent& evt);
 		void ButtonBackspaceDelete(wxCommandEvent& evt);
 		void ButtonEquals(wxCommandEvent& evt);
@@ -57,7 +66,6 @@ private:
 		void ButtonAdd(wxCommandEvent& evt);
 		void ButtonModulo(wxCommandEvent& evt);
 	    void ButtonDecimal(wxCommandEvent& evt);
-		
 		void ButtonSin(wxCommandEvent& evt);
 		void ButtonCos(wxCommandEvent& evt);
 		void ButtonTan(wxCommandEvent& evt);
@@ -66,10 +74,10 @@ private:
 
 public:
 
-	Window();
+	Window();//constructor
 
-	void BindEvents();
+	
 
-	wxTextCtrl* GetTextBox();
+	wxTextCtrl* GetTextBox();//accessor for text display
 };
 

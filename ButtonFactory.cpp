@@ -3,12 +3,12 @@
 #include "CalculatorProcessor.h"
 #include <vector>
 
-
+//base button method
 wxButton* ButtonFactory::CreateBtn( wxFrame* parent, int id, const wxString& label, wxPoint(pos), wxSize(size))
 {
 	return new wxButton(parent, id, label, pos, size);
 }
-
+//creates number buttons 0-9 wit event binding
 wxButton* ButtonFactory::CreateNumberBtn(wxFrame* parent, int id, const wxString& label, wxPoint(pos), wxSize(size))
 {
 	wxButton* button = new wxButton(parent, id, label);
@@ -21,7 +21,7 @@ wxButton* ButtonFactory::CreateNumberBtn(wxFrame* parent, int id, const wxString
 	return button;
 		
 }
-
+//create operation button
 wxButton* ButtonFactory::CreateOperationBtn(wxFrame* parent, int id, const wxString& label, wxPoint(pos), wxSize(size))
 {
 	wxButton* button = CreateBtn(parent, id, label, pos, size);
@@ -33,7 +33,7 @@ wxButton* ButtonFactory::CreateOperationBtn(wxFrame* parent, int id, const wxStr
     }, id);
   return button;
 }
-
+//creates functions button
 wxButton* ButtonFactory::CreateFunctionBtn(wxFrame* parent, int id, const wxString& label, wxPoint(pos), wxSize(size))
 {
 	wxButton* button = CreateBtn(parent, id, label, pos, size);
@@ -46,7 +46,7 @@ wxButton* ButtonFactory::CreateFunctionBtn(wxFrame* parent, int id, const wxStri
 	}, id);
 	return button;
 }
-
+//create clear button
 wxButton* ButtonFactory::CreateClearBtn(wxFrame* parent, int id, const wxString& label, wxPoint(pos), wxSize(size))
 {
 	wxButton* button = CreateBtn(parent, id, "C", pos, size);
@@ -58,7 +58,7 @@ wxButton* ButtonFactory::CreateClearBtn(wxFrame* parent, int id, const wxString&
 		}, id);
 	return button;
 }
-
+//create backspace/ delete button
 wxButton* ButtonFactory::CreateBackSpaceBtn(wxFrame* parent, int id, const wxString& label, wxPoint(pos), wxSize(size))
 {
 	wxButton* button = CreateBtn(parent, id, "<-",pos , size);
@@ -74,7 +74,7 @@ wxButton* ButtonFactory::CreateBackSpaceBtn(wxFrame* parent, int id, const wxStr
 	}, id);
 	return button;
 }
-
+// create equal button 
 wxButton* ButtonFactory::CreateEqualBtn(wxFrame* parent, int id, const wxString& label, wxPoint(pos), wxSize(size))
 {
 	

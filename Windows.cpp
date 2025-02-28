@@ -3,21 +3,23 @@
 #include "ButtonFactory.h"
 #include "CalculatorProcessor.h"
 
-
+//window constructor - main window 
 Window::Window() : wxFrame(nullptr, wxID_ANY, "Krystal Calculator", wxPoint(0,0), wxSize(250, 300))
 {
-
+	//main position and size set
 	wxPoint pos(100, 100);
-	wxSize size(80, 40);
+	wxSize size(100, 50);
 
 	Controls(); //sets up the layout
-	BindEvents();
+	BindEvents();//bind button events
 	
 }
+//bindevents -  buttons to clicks
 void Window::BindEvents() {
 
 	
 	//bind all buttons events
+	//ids connects for different functions
 	Bind(wxEVT_BUTTON, &Window::Button0, this, 10000);
 	Bind(wxEVT_BUTTON, &Window::Button1, this, 10001);
 	Bind(wxEVT_BUTTON, &Window::Button2, this, 10002);
@@ -28,27 +30,29 @@ void Window::BindEvents() {
 	Bind(wxEVT_BUTTON, &Window::Button7, this, 10007);
 	Bind(wxEVT_BUTTON, &Window::Button8, this, 10008);
 	Bind(wxEVT_BUTTON, &Window::Button9, this, 10009);
-	Bind(wxEVT_BUTTON, &Window::ButtonEquals, this, 100010);
-	Bind(wxEVT_BUTTON, &Window::ButtonClear, this, 100011);
-	Bind(wxEVT_BUTTON, &Window::ButtonBackspaceDelete, this, 100012);
-	Bind(wxEVT_BUTTON, &Window::ButtonNegativePositive, this, 100013);
-	Bind(wxEVT_BUTTON, &Window::ButtonModulo, this, 100014);
-	Bind(wxEVT_BUTTON, &Window::ButtonAdd, this, 100015);
-	Bind(wxEVT_BUTTON, &Window::ButtonMinus, this, 100016);
-	Bind(wxEVT_BUTTON, &Window::ButtonDivide, this, 100017);
-	Bind(wxEVT_BUTTON, &Window::ButtonMultiply, this, 100018);
-	Bind(wxEVT_BUTTON, &Window::ButtonSin, this, 100019);
-	Bind(wxEVT_BUTTON, &Window::ButtonCos, this, 100020);
-	Bind(wxEVT_BUTTON, &Window::ButtonTan, this, 100021);
-	Bind(wxEVT_BUTTON, &Window::ButtonDecimal, this, 100022);
-	Bind(wxEVT_BUTTON, &Window::Button, this, 100026);
+	Bind(wxEVT_BUTTON, &Window::ButtonEquals, this, 10010);
+	Bind(wxEVT_BUTTON, &Window::ButtonClear, this, 10011);
+	Bind(wxEVT_BUTTON, &Window::ButtonBackspaceDelete, this, 10012);
+	Bind(wxEVT_BUTTON, &Window::ButtonNegativePositive, this, 10013);
+	Bind(wxEVT_BUTTON, &Window::ButtonModulo, this, 10014);
+	Bind(wxEVT_BUTTON, &Window::ButtonAdd, this, 10015);
+	Bind(wxEVT_BUTTON, &Window::ButtonMinus, this, 10016);
+	Bind(wxEVT_BUTTON, &Window::ButtonDivide, this, 10017);
+	Bind(wxEVT_BUTTON, &Window::ButtonMultiply, this, 10018);
+	Bind(wxEVT_BUTTON, &Window::ButtonSin, this, 10019);
+	Bind(wxEVT_BUTTON, &Window::ButtonCos, this, 10020);
+	Bind(wxEVT_BUTTON, &Window::ButtonTan, this, 10021);
+	Bind(wxEVT_BUTTON, &Window::ButtonDecimal, this, 10022);
+	Bind(wxEVT_BUTTON, &Window::Button, this, 10026);
 
 
 }
+//getTextBox display
 wxTextCtrl* Window::GetTextBox()
 {
 	return textBox; 
 }
+
 void Window::Controls(){
 
 	
@@ -59,8 +63,8 @@ void Window::Controls(){
 	//create add textbox 
 	textBox = new wxTextCtrl(this, wxID_ANY, " ", wxDefaultPosition, wxSize(275,75));
 	//set color to textbox
-	textBox->SetBackgroundColour(wxColour(*wxYELLOW));
-	this->SetBackgroundColour(wxColour(*wxBLACK));
+	textBox->SetBackgroundColour(wxColour(*wxBLUE));
+	this->SetBackgroundColour(wxColour(*wxGREEN));
 
 	mainSizer->Add(textBox, 0, wxEXPAND | wxALL, 5);
 	//create grid sizer
@@ -135,7 +139,7 @@ void Window::CreateBtn() {
 
 	Clear = ButtonFactory::CreateClearBtn(this, 10011, " C", wxDefaultPosition, wxDefaultSize);
 	button = ButtonFactory::CreateBtn(this, 10026, " ", wxDefaultPosition, wxDefaultSize);
-	BackspaceDelete = ButtonFactory::CreateBackSpaceBtn(this, 10012, " <-", wxDefaultPosition, wxDefaultSize);
+	BackspaceDelete = ButtonFactory::CreateBackSpaceBtn(this, 10012, "<-", wxDefaultPosition, wxDefaultSize);
 	Equals = ButtonFactory::CreateEqualBtn(this, 10010, " = ", wxDefaultPosition, wxDefaultSize);
 }
 void Window::Button(wxCommandEvent& evt)
@@ -280,8 +284,9 @@ void Window::ButtonEquals(wxCommandEvent& evt)
 		textBox->SetValue(wxString::Format("%.2f", result));
 	}
 	catch (const std::exception& e) {
-		textBox->SetValue("ERROR");
+		textBox->SetValue(e.what());
 	}
 	evt.Skip();
+	
 }
 
