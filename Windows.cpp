@@ -277,16 +277,20 @@ void Window::ButtonBackspaceDelete(wxCommandEvent& evt)
 void Window::ButtonEquals(wxCommandEvent& evt)
 {
 	wxString expression = textBox->GetValue();
-	expression.Replace("", "");
-	try {
-		double result = CalculatorProcessor::GetInstance()->Calculate(expression.ToStdString());
+	if (!expression.IsEmpty()) {
+		expression.Replace(wxT(" "), wxT(""), true);
+		try {
+			double result = CalculatorProcessor::GetInstance()->Calculate(expression.ToStdString());
 
-		textBox->SetValue(wxString::Format("%.2f", result));
+			textBox->SetValue(wxString::Format("%.2f", result));
+		}
+		catch (const std::exception&) {
+			textBox->SetValue("ERROR");
+		}
+		
+
 	}
-	catch (const std::exception& e) {
-		textBox->SetValue(e.what());
-	}
-	evt.Skip();
-	
+
+  evt.Skip();
 }
 
