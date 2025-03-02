@@ -3,6 +3,7 @@
 #include "ButtonFactory.h"
 #include "CalculatorProcessor.h"
 #include <cmath>
+using namespace std;
 
 //window constructor - main window 
 Window::Window() : wxFrame(nullptr, wxID_ANY, "Krystal Calculator", wxPoint(0,0), wxSize(250, 200))
@@ -240,17 +241,17 @@ void Window::ButtonDecimal(wxCommandEvent& evt)
 
 void Window::ButtonSin(wxCommandEvent& evt)
 {
-	textBox->AppendText("sin");
+	textBox->AppendText("sin(");
 }
 
 void Window::ButtonCos(wxCommandEvent& evt)
 {
-	textBox->AppendText("cos");
+	textBox->AppendText("cos(");
 }
 
 void Window::ButtonTan(wxCommandEvent& evt)
 {
-	textBox->AppendText("tan");
+	textBox->AppendText("tan(");
 }
 
 void Window::ButtonNegativePositive(wxCommandEvent& evt)
@@ -289,20 +290,27 @@ void Window::ButtonEquals(wxCommandEvent& evt)
 				double radians = angle * 3.14159265358979323846 / 180.8;
 				double result = 0.0;
 				if (functions == "sin") {
-					result = sin(radians);
+					result = std::sin(radians);
 				}
 				else if (functions == "cos") {
-					result = cos(radians);
+					result = std::cos(radians);
 				}
 				else if (functions == "tan") {
-					result = tan(radians);
-
+					if (std::cos(radians) == 0) {
+ 
+						textBox->SetValue("undefined");
+						return;
+					}
+				 result = std::tan(radians);
 				}
+			
+
 				textBox->SetValue(wxString::Format("%.6g", result));
+				return;
 			}
 			double result = CalculatorProcessor::GetInstance()->Calculate(expression.ToStdString());
 			
-				textBox->SetValue(wxString::Format("%d", static_cast <int> (result)));
+			textBox->SetValue(wxString::Format("%.6g", result));
 			
 		}
 		catch (const std::exception& ) {
@@ -312,7 +320,7 @@ void Window::ButtonEquals(wxCommandEvent& evt)
 
 	}
 
-      evt.Skip();
+   evt.Skip();
 }
 
 wxString Window::FormatExpression(const wxString& express) {
