@@ -2,9 +2,10 @@
 #include <wx/tokenzr.h>
 #include "ButtonFactory.h"
 #include "CalculatorProcessor.h"
+#include <cmath>
 
 //window constructor - main window 
-Window::Window() : wxFrame(nullptr, wxID_ANY, "Krystal Calculator", wxPoint(0,0), wxSize(250, 300))
+Window::Window() : wxFrame(nullptr, wxID_ANY, "Krystal Calculator", wxPoint(0,0), wxSize(250, 200))
 {
 	//main position and size set
 	wxPoint pos(100, 100);
@@ -61,11 +62,11 @@ void Window::Controls(){
 	Clear = Equals = Divide = Modulo = nullptr;
 	wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 	//create add textbox 
-	textBox = new wxTextCtrl(this, wxID_ANY, " ", wxDefaultPosition, wxSize(275,75));
+	textBox = new wxTextCtrl(this, wxID_ANY, " ", wxDefaultPosition, wxSize(255,55));
 	//set color to textbox
 	textBox->SetBackgroundColour(wxColour(*wxBLUE));
 	this->SetBackgroundColour(wxColour(*wxGREEN));
-
+	textBox->SetForegroundColour(wxColour("ORANGE"));
 	mainSizer->Add(textBox, 0, wxEXPAND | wxALL, 5);
 	//create grid sizer
 	wxGridSizer* grid = new wxGridSizer(6,4,3,3);
@@ -239,17 +240,17 @@ void Window::ButtonDecimal(wxCommandEvent& evt)
 
 void Window::ButtonSin(wxCommandEvent& evt)
 {
-	textBox->AppendText("sin(");
+	textBox->AppendText("sin");
 }
 
 void Window::ButtonCos(wxCommandEvent& evt)
 {
-	textBox->AppendText("cos(");
+	textBox->AppendText("cos");
 }
 
 void Window::ButtonTan(wxCommandEvent& evt)
 {
-	textBox->AppendText("tan(");
+	textBox->AppendText("tan");
 }
 
 void Window::ButtonNegativePositive(wxCommandEvent& evt)
@@ -276,21 +277,50 @@ void Window::ButtonBackspaceDelete(wxCommandEvent& evt)
 
 void Window::ButtonEquals(wxCommandEvent& evt)
 {
-	wxString expression = textBox->GetValue();
+	wxString expression = textBox->GetValue().Trim();
 	if (!expression.IsEmpty()) {
-		expression.Replace(wxT(" "), wxT(""), true);
+		expression.Replace(" ", "");
 		try {
-			double result = CalculatorProcessor::GetInstance()->Calculate(expression.ToStdString());
+			if (expression.Contains("sin") || expression.Contains("cos") || expression.Contains("tan")) {
+				wxString functions = expression.BeforeFirst('(');
+				wxString angleString = expression.AfterFirst('(').BeforeLast(')');
+				double angle = wxAtof(angleString);
 
-			textBox->SetValue(wxString::Format("%.2f", result));
+				double radians = angle * 3.14159265358979323846 / 180.8;
+				double result = 0.0;
+				if (functions == "sin") {
+					result = sin(radians);
+				}
+				else if (functions == "cos") {
+					result = cos(radians);
+				}
+				else if (functions == "tan") {
+					result = tan(radians);
+
+				}
+				textBox->SetValue(wxString::Format("%.6g", result));
+			}
+			double result = CalculatorProcessor::GetInstance()->Calculate(expression.ToStdString());
+			
+				textBox->SetValue(wxString::Format("%d", static_cast <int> (result)));
+			
 		}
-		catch (const std::exception&) {
+		catch (const std::exception& ) {
 			textBox->SetValue("ERROR");
 		}
 		
 
 	}
 
-  evt.Skip();
+      evt.Skip();
 }
 
+wxString Window::FormatExpression(const wxString& express) {
+	wxString formatted = express;
+	formatted.Replace(" ", "");
+	formatted.Replace("++", "+");
+	formatted.Replace("--", "+");
+	formatted.Replace("+-", "-");
+	formatted.Replace("-+", "-");
+	return formatted;
+}

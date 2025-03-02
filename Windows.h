@@ -59,6 +59,7 @@ private:
 		void Button0(wxCommandEvent& evt);
 		void ButtonBackspaceDelete(wxCommandEvent& evt);
 		void ButtonEquals(wxCommandEvent& evt);
+		wxString FormatExpression(const wxString& express);
 		void ButtonClear(wxCommandEvent& evt);
 		void ButtonMultiply(wxCommandEvent& evt);
 		void ButtonMinus(wxCommandEvent& evt);
