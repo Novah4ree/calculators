@@ -25,6 +25,9 @@ CalculatorProcessor::~CalculatorProcessor() {}
 double CalculatorProcessor::Calculate(const std::string& expression)
 {    //wxString to string
     std::string m_string = expression;
+    if (!m_string.empty() && m_string[0] == '-') {
+        m_string = "0" + m_string;
+    }
     std::stack<double>  valuestack;
     if (m_string.empty()) {
         return 0.0;
@@ -102,9 +105,9 @@ double CalculatorProcessor::Calculate(const std::string& expression)
         else if (token == "+" || token == "-" || token == "*" || token == "/" || token == "%") {
 
             if (_tokens.size() == 3) {
-                double a = std::stod(_tokens[0]);
-                double b = std::stod(_tokens[2]);
-
+                double b= std::stod(_tokens[0]);
+                double a= std::stod(_tokens[2]);
+               
                 std::string oper = _tokens[1];
                 if (oper == "+") {
                     valuestack.push(a + b);
@@ -129,6 +132,23 @@ double CalculatorProcessor::Calculate(const std::string& expression)
                        }
                   
                 }
+            }
+            if (_tokens.size() == 2) {
+                double angle = std::stod(_tokens[1]);
+                double radians = angle * 3.14159265358979323846 / 180.0;
+                if (_tokens[0] == "sin") {
+                    return std::sin(radians);
+                }
+                if (_tokens[0] == "cos") {
+                    return std::cos(radians);
+                }
+                if (_tokens[0] == "tan") {
+                    if (std::cos(radians) == 0) {
+                        throw std::runtime_error("undefined tan value");
+                        return std::tan(radians);
+                    }
+                }
+                throw std::runtime_error("invalid expressions");
             }
         }   
         //process numbers
