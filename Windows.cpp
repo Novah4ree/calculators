@@ -287,7 +287,7 @@ void Window::ButtonEquals(wxCommandEvent& evt)
 				wxString angleString = expression.AfterFirst('(').BeforeLast(')');
 				double angle = wxAtof(angleString);
 
-				double radians = angle * 3.14159265358979323846 / 180.0;
+				double radians = angle * M_PI / 180.0;
 				double result = 0.0;
 				if (functions == "sin") {
 					result = std::sin(radians);
@@ -296,7 +296,7 @@ void Window::ButtonEquals(wxCommandEvent& evt)
 					result = std::cos(radians);
 				}
 				else if (functions == "tan") {
-					if (std::abs(std::cos(radians)) < std::pow(10, -10) {
+					if (std::abs(std::cos(radians)) < std::pow(10, -10)) {
  
 						textBox->SetValue("undefined");
 						return;
